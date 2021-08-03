@@ -1,3 +1,4 @@
+package com.RestaurantFinder;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -15,18 +16,37 @@ public class Restaurant {
         this.location = location;
         this.openingTime = openingTime;
         this.closingTime = closingTime;
+        //default menu items
+        this.menu.add(new Item("Lemon Rice",73));
+        this.menu.add(new Item("Sambar Rice",45));
     }
-
-    public boolean isRestaurantOpen() {
-        return true;
-        //DELETE ABOVE STATEMENT AND WRITE CODE HERE
-    }
-
     public LocalTime getCurrentTime(){ return  LocalTime.now(); }
 
+    public LocalTime getOpeningTime() { return openingTime; }
+
+    public void setOpeningTime(LocalTime openingTime) {
+        this.openingTime = openingTime;
+    }
+
+    public LocalTime getClosingTime() { return closingTime; }
+
+    public void setClosingTime(LocalTime closingTime) {
+        this.closingTime = closingTime;
+    }
+
+    public boolean isRestaurantOpen(){
+        LocalTime time = LocalTime.now();
+        int isStillOpen = time.compareTo(closingTime);
+        int isOpen = time.compareTo(openingTime);
+        if(isStillOpen<0&&isOpen>=0){
+            return true;
+        }
+        return false;
+    }
+
+
     public List<Item> getMenu() {
-        return null;
-        //DELETE ABOVE RETURN STATEMENT AND WRITE CODE HERE
+        return this.menu;
     }
 
     private Item findItemByName(String itemName){
@@ -41,7 +61,7 @@ public class Restaurant {
         Item newItem = new Item(name,price);
         menu.add(newItem);
     }
-    
+
     public void removeFromMenu(String itemName) throws itemNotFoundException {
 
         Item itemToBeRemoved = findItemByName(itemName);
@@ -62,5 +82,14 @@ public class Restaurant {
     public String getName() {
         return name;
     }
+
+    public int getOrderValue(List<Item> item){
+        int totalValue = 0;
+        for (Item myItem : item) {
+            totalValue += myItem.getPrice();
+        }
+        return totalValue;
+    }
+}
 
 }
